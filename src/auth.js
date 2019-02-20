@@ -39,6 +39,9 @@ exports.emailLogin = (req, res) => {
       if (!user.comparePassword(`${password}`)) {
         return res.status(401).send({ message: 'Incorrect password' });
       }
+      const token = tokenHelper.createToken(user);
+
+      res.cookie('Authorization', token, { maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
       return res.status(200).send({ token: tokenHelper.createToken(user), userId: user.id });
     })
     .catch(err => res.status(500).send({ message: err }));

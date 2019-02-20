@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 // const authCtrl = require('./auth');
 // const middleware = require('./middleware');
 const dbConfig = require('./db/config');
@@ -11,8 +12,9 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cors());
-app.set('port', 3000);
+app.set('port', 3001);
 
 // routes
 app.use('/', routes);
