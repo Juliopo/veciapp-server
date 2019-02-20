@@ -4,6 +4,7 @@ const moment = require('moment');
 const User = require('./db/models/user');
 const tokenHelper = require('./token');
 const config = require('./config');
+const { findUserByEmail, findUserById } = require('./db/controllers/userController');
 
 exports.emailSignup = (req, res) => {
   const { email, password } = req.body;
@@ -11,37 +12,36 @@ exports.emailSignup = (req, res) => {
   newUser.email = email;
   newUser.password = newUser.encryptPassword(password);
 
-  User.findOne({ email }, (err, user) => {
-    if (err) return res.status(500).send('There was a problem registering the user');
+  findUserByEmail(email)
+    .then((user) => {
+      if (user) {
+        return res.status(403).send({
+          message: 'email already in use'
+        });
+      }
 
-    if (user) {
-      return res.status(403).send({
-        message: 'email already in use'
-      });
-    }
-
-    newUser.save().then(
-      usr => res.status(200).send({ token: tokenHelper.createToken(usr._id) }),
-      () => res.status(500).send({ message: err })
-    );
-  });
+      newUser.save().then(
+        usr => res.status(200).send({ token: tokenHelper.createToken(usr._id) }),
+        err => res.status(500).send({ message: err })
+      );
+    })
+    .catch(() => res.status(500).send('There was a problem registering the user'));
 };
 
 exports.emailLogin = (req, res) => {
   const { email, password } = req.body;
 
-  User.findOne({ email }, (err, user) => {
-    if (err) return res.status(500).send({ message: 'There was a problem finding email user' });
-
-    if (!user) {
-      return res.status(404).send({ message: 'No User Found' });
-    }
-    if (!user.comparePassword(password)) {
-      return res.status(401).send({ message: 'Incorrect password' });
-    }
-
-    return res.status(200).send({ token: tokenHelper.createToken(user) });
-  });
+  findUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'No User Found' });
+      }
+      if (!user.comparePassword(`${password}`)) {
+        return res.status(401).send({ message: 'Incorrect password' });
+      }
+      return res.status(200).send({ token: tokenHelper.createToken(user), userId: user.id });
+    })
+    .catch(err => res.status(500).send({ message: err }));
 };
 
 exports.ensureAuthenticated = (req, res) => {
@@ -56,8 +56,7 @@ exports.ensureAuthenticated = (req, res) => {
     return res.status(401).send({ message: 'Token expired' });
   }
 
-  User.findOne({ _id: payload.sub }, (err, user) => {
-    if (err) return res.status(500).send({ message: 'There was a problem finding id user' });
+  findUserById({ _id: payload.sub }).then((user) => {
     if (!user) {
       return res.status(403).send({
         message: 'No user found with this token'
@@ -65,5 +64,5 @@ exports.ensureAuthenticated = (req, res) => {
     }
 
     return res.status(200).send({ message: 'succesfully loged' });
-  });
+  }).catch(() => res.status(500).send({ message: 'There was a problem finding id user' }));
 };
