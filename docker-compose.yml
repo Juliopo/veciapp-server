@@ -1,0 +1,19 @@
+version: "2"
+services:
+  app:
+    container_name: veciapp-server
+    restart: always
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+        - '27017:27017'
+    volumes:
+    - data-volume:/data/db
+volumes:
+  data-volume:

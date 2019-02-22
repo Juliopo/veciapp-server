@@ -1,8 +1,8 @@
 {
-  "name": "nodejs-passport-local",
+  "name": "veciapp-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Veci app server",
+  "main": ".src/server.js",
   "scripts": {
     "dev": "nodemon --inspect ./src/server.js"
   },
