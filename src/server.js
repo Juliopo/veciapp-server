@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
-app.set('port', 80);
+app.set('port', 443);
 
 // routes
 app.use('/', routes);
