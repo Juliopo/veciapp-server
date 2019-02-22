@@ -13,8 +13,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
-app.set('port', 443);
+app.use(cors({
+  credentials: true,
+  origin: 'https://veciapp.com'
+}));
+app.set('port', 80);
 
 // routes
 app.use('/', routes);
