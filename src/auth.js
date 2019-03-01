@@ -41,20 +41,22 @@ exports.emailLogin = (req, res) => {
       }
       const token = tokenHelper.createToken(user);
 
-      res.cookie('Authorization', token, { maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
+      res.cookie('Authorization', token, { domain: 'veciapp.com', maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
       return res.status(200).send({ token: tokenHelper.createToken(user), userId: user.id });
     })
     .catch(err => res.status(500).send({ message: err }));
 };
 
 exports.ensureAuthenticated = (req, res) => {
-  const authCookie = req.cookies.authorization || req.cookies.Authorization;
+  const auth = req.cookies.Authorization;
 
-  if (!authCookie) {
+  console.log(auth);
+
+  if (!auth) {
     return res.status(403).send({ message: 'No auth' });
   }
 
-  const token = authCookie || '';
+  const token = auth || '';
   const payload = jwt.decode(token, config.TOKEN_SECRET);
 
   if (payload.exp <= moment().unix()) {
