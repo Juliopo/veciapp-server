@@ -4,7 +4,7 @@
   "description": "Veci app server",
   "main": ".src/server.js",
   "scripts": {
-    "dev": "nodemon --inspect ./src/server.js"
+    "dev": "nodemon -L --inspect=0.0.0.0:7000 ./src/server.js"
   },
   "keywords": [],
   "author": "",

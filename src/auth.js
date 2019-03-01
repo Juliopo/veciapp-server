@@ -48,11 +48,13 @@ exports.emailLogin = (req, res) => {
 };
 
 exports.ensureAuthenticated = (req, res) => {
-  if (!req.headers.Authorization) {
+  const authCookie = req.cookies.authorization || req.cookies.Authorization;
+
+  if (!authCookie) {
     return res.status(403).send({ message: 'No auth' });
   }
 
-  const token = req.headers.Authorization || '';
+  const token = authCookie || '';
   const payload = jwt.decode(token, config.TOKEN_SECRET);
 
   if (payload.exp <= moment().unix()) {
