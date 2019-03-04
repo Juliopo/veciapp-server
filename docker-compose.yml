@@ -3,7 +3,9 @@ services:
   app:
     container_name: veciapp-server
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: "Dockerfile${ENV}"
     ports:
       - "80:80"
     depends_on:

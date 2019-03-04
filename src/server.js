@@ -9,14 +9,16 @@ const routes = require('./routes/index');
 
 // initializations
 const app = express();
+const origin = process.env.HOST ? { origin: process.env.HOST } : {};
+const corsOptions = {
+  credentials: true,
+  ...origin
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  credentials: true,
-  origin: 'https://veciapp.com'
-}));
+app.use(cors(corsOptions));
 app.set('port', 80);
 
 // routes

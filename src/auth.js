@@ -6,6 +6,9 @@ const tokenHelper = require('./token');
 const config = require('./config');
 const { findUserByEmail, findUserById } = require('./db/controllers/userController');
 
+const domain = process.env.HOST ? { domain: process.env.HOST.replace('https://', '') } : {};
+console.log(domain);
+
 exports.emailSignup = (req, res) => {
   const { email, password } = req.body;
   const newUser = new User();
@@ -41,8 +44,8 @@ exports.emailLogin = (req, res) => {
       }
       const token = tokenHelper.createToken(user);
 
-      res.cookie('Authorization', token, { domain: 'veciapp.com', maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
-      return res.status(200).send({ token: tokenHelper.createToken(user), userId: user.id });
+      res.cookie('Authorization', token, { ...domain, maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
+      return res.status(200).send({ token: tokenHelper.createToken(user) });
     })
     .catch(err => res.status(500).send({ message: err }));
 };
