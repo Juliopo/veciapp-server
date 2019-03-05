@@ -1,12 +1,13 @@
 FROM node:10
 
-WORKDIR /usr/src/app
+RUN mkdir /app
+WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json /app/
 
 RUN npm install
 
-COPY . .
+COPY . /app
 
 EXPOSE 80
 

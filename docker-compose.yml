@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile${ENV}"
+    volumes:
+      - ./:/app
     ports:
       - "80:80"
     depends_on:
@@ -14,8 +16,10 @@ services:
     container_name: mongo
     image: mongo
     ports:
-        - '27017:27017'
+      - '27017:27017'
+    volumes_from:
+      - mongodata
+  mongodata:
+    image: tianon/true
     volumes:
-    - data-volume:/data/db
-volumes:
-  data-volume:
+      - /data/db

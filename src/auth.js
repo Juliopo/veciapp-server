@@ -7,7 +7,6 @@ const config = require('./config');
 const { findUserByEmail, findUserById } = require('./db/controllers/userController');
 
 const domain = process.env.HOST ? { domain: process.env.HOST.replace('https://', '') } : {};
-console.log(domain);
 
 exports.emailSignup = (req, res) => {
   const { email, password } = req.body;
@@ -52,8 +51,6 @@ exports.emailLogin = (req, res) => {
 
 exports.ensureAuthenticated = (req, res) => {
   const auth = req.cookies.Authorization;
-
-  console.log(auth);
 
   if (!auth) {
     return res.status(403).send({ message: 'No auth' });
