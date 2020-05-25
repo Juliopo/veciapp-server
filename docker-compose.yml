@@ -5,9 +5,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: "Dockerfile${ENV}"
-    volumes:
-      - ./:/app
+      dockerfile: "Dockerfile"
     ports:
       - "80:80"
     depends_on:

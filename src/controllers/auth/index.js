@@ -1,10 +1,10 @@
 // auth.js
 const jwt = require('jwt-simple');
 const moment = require('moment');
-const User = require('./db/models/user');
-const tokenHelper = require('./token');
-const config = require('./config');
-const { findUserByEmail, findUserById } = require('./db/controllers/userController');
+const User = require('../../db/models/user');
+const tokenHelper = require('../../token');
+const config = require('../../config');
+const { findUserByEmail, findUserById } = require('../../db/controllers/userController');
 
 const domain = process.env.HOST ? { domain: process.env.HOST.replace('https://', '') } : {};
 
@@ -44,7 +44,7 @@ exports.emailLogin = (req, res) => {
       const token = tokenHelper.createToken(user);
 
       res.cookie('Authorization', token, { ...domain, maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
-      return res.status(200).send({ token: tokenHelper.createToken(user) });
+      return res.status(200).send({ token });
     })
     .catch(err => res.status(500).send({ message: err }));
 };

@@ -5,7 +5,7 @@
   "main": ".src/server.js",
   "scripts": {
     "dev": " nodemon -L --inspect=0.0.0.0:7000 ./src/server.js",
-    "prod": "HOST=https://veciapp.com node ./src/server.js"
+    "prod": "node ./src/server.js"
   },
   "keywords": [],
   "author": "",

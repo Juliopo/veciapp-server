@@ -2,23 +2,30 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-// const authCtrl = require('./auth');
-// const middleware = require('./middleware');
 const dbConfig = require('./db/config');
 const routes = require('./routes/index');
 
-// initializations
-const app = express();
-const origin = process.env.HOST ? { origin: process.env.HOST } : {};
-const corsOptions = {
-  credentials: true,
-  ...origin
+const whiteList = [];
+const corsOptionsDelegate = (req, callback) => {
+  const corsOptions = {
+    credentials: true
+  };
+
+  if (whiteList.indexOf(req.header('Origin')) !== -1) {
+    corsOptions.origin = true; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions.origin = false; // disable CORS for this request
+  }
+
+  callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
+// initializations
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors(corsOptions));
+app.use(cors(corsOptionsDelegate));
 app.set('port', 80);
 
 // routes
