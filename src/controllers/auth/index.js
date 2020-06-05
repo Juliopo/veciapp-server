@@ -43,7 +43,6 @@ exports.emailLogin = (req, res) => {
       }
       const token = tokenHelper.createToken(user);
 
-      res.cookie('Authorization', token, { ...domain, maxAge: (15 * 24 * 60 * 60 * 1000), httpOnly: true });
       return res.status(200).send({ token });
     })
     .catch(err => res.status(500).send({ message: err }));
