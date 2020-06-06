@@ -37,4 +37,3 @@ dbConfig.initDb(() => {
     console.log('server on port', app.get('port'));
   });
 });
-

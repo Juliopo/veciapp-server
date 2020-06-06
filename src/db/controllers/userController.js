@@ -1,8 +1,8 @@
 const User = require('../models/user');
 
-exports.findUserByEmail = email => (
+exports.findUsersByEmail = email => (
   new Promise((resolve, reject) => {
-    User.findOne({ email }, (err, user) => {
+    User.find({ email }, (err, user) => {
       if (err) reject(err);
       resolve(user);
     });

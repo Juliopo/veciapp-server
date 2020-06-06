@@ -8,7 +8,8 @@ const userSchema = new Schema({
   password: String,
   reset_password_token: String,
   reset_password_expires: String,
-  departmentId: String
+  departmentId: String,
+  role: Number
 });
 
 userSchema.methods.encryptPassword = function (password) {
