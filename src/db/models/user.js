@@ -8,7 +8,7 @@ const userSchema = new Schema({
   password: String,
   reset_password_token: String,
   reset_password_expires: String,
-  departmentId: String,
+  departments: Array,
   role: Number
 });
 
