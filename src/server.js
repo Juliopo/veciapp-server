@@ -32,7 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 app.options('*', cors());
-app.set('port', 443);
+app.set('port', 80);
 
 // routes
 app.use('/', routes);
