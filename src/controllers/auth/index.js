@@ -75,7 +75,7 @@ exports.ensureAuthenticated = (req, res) => {
   const auth = req.headers.authorization;
 
   if (!auth) {
-    return res.status(403).send({ message: 'No auth' });
+    return res.status(403).send({ message: 'No auth updated' });
   }
 
   const token = auth || '';
