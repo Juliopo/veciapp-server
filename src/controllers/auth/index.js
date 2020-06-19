@@ -71,11 +71,11 @@ exports.emailLogin = (req, res) => {
     .catch(err => res.status(500).send({ message: err }));
 };
 
-exports.ensureAuthenticated = (req, res) => {
+exports.authMiddleware = (req, res, next) => {
   const auth = req.headers.authorization;
 
   if (!auth) {
-    return res.status(403).send({ message: 'No auth updated' });
+    return res.status(403).send({ message: 'No auth' });
   }
 
   const token = auth || '';
@@ -92,6 +92,8 @@ exports.ensureAuthenticated = (req, res) => {
       });
     }
 
-    return res.status(200).send(payload);
+    req.auth = payload;
+
+    return next();
   }).catch(() => res.status(500).send({ message: 'There was a problem finding id user' }));
 };
