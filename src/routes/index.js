@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const { emailSignup, emailLogin, authMiddleware } = require('../controllers/auth');
+const {
+  emailSignup, emailLogin, authMiddleware, getDepartmentsByEmail
+} = require('../controllers/auth');
 const {
   getAllPosts, createPost, getPost, editPost, deletePost
 } = require('../controllers/post');
 
 router.post('/signup', emailSignup);
+router.post('/departments', getDepartmentsByEmail);
 router.post('/login', emailLogin);
 router.get('/auth', authMiddleware, (req, res) => res.send(req.auth));
 

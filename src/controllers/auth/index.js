@@ -43,6 +43,19 @@ exports.emailSignup = (req, res) => {
     .catch(() => res.status(500).send('There was a problem registering the user'));
 };
 
+exports.getDepartmentsByEmail = (req, res) => {
+  const { email } = req.body;
+
+  findUserByEmail(email)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'No User Found' });
+      }
+
+      return res.status(200).send({ departments: user.departments });
+    }).catch(err => res.status(500).send({ message: err }));
+};
+
 exports.emailLogin = (req, res) => {
   const { email, password, departmentId } = req.body;
 
