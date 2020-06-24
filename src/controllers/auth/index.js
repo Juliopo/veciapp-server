@@ -18,7 +18,7 @@ exports.emailSignup = (req, res) => {
   }
 
   if (!isArray(departments)) {
-    return res.status(400).send({ message: 'departmetId should be an array of strings' });
+    return res.status(400).send({ message: 'department should be an array of strings' });
   }
 
   const newUser = new User();

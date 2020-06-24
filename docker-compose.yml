@@ -6,18 +6,26 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile"
+    environment:
+      - MONGO_APP_USERNAME=${MONGO_APP_USERNAME}
+      - MONGO_APP_PASSWORD=${MONGO_APP_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     ports:
       - "80:80"
     depends_on:
       - mongo
   mongo:
     container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_APP_USERNAME=${MONGO_APP_USERNAME}
+      - MONGO_APP_PASSWORD=${MONGO_APP_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     image: mongo
+    command: mongod
     ports:
       - '27017:27017'
-    volumes_from:
-      - mongodata
-  mongodata:
-    image: tianon/true
     volumes:
+      - "$PWD/mongo-init/:/docker-entrypoint-initdb.d/"
       - /data/db
